@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:rink_now/pages/edit_post.dart';
 import 'package:rink_now/scoped_models/main_model.dart';
-
+import 'package:intl/intl.dart';
 import '../types/post.dart';
 
 //import 'scoped_models/posts_model.dart';
@@ -23,15 +23,34 @@ class PostDisplayer extends StatelessWidget {
         return Card(
           child: Row(
             children: <Widget>[
-              Column(
+              Expanded(
+                  child: Column(
                 children: <Widget>[
-                  Text("City: " + currPost.city),
-                  Text("Price: " + currPost.price.toString()),
-                  Text("Description: " + currPost.description),
+                  Text(
+                    currPost.selectedRink,
+                    style: TextStyle(
+                        fontFamily: 'Oswald',
+                        color: Colors.blue,
+                        fontSize: 15.0),
+                    textAlign: TextAlign.left,
+                  ),
+                  Text(currPost.city),
+                  Padding(padding: EdgeInsets.all(8.0)),
+                  Text(DateFormat.MMMd().format(currPost.date)),
+                  Text(DateFormat.jm().format(currPost.date)),
+                ],
+              )),
+              Expanded(child: Container()),
+              Expanded(
+                  child: Column(
+                children: <Widget>[
+                  Text('\$' + currPost.price.toString(),
+                      style: TextStyle(color: Colors.green)),
                   ButtonBar(
                     alignment: MainAxisAlignment.center,
                     children: <Widget>[
                       RaisedButton(
+                          color: Colors.lightBlueAccent,
                           child: Text('Book'),
                           onPressed: () {
                             model.selectPost(currPost.id);
@@ -43,7 +62,7 @@ class PostDisplayer extends StatelessWidget {
                     ],
                   ),
                 ],
-              )
+              ))
             ],
           ),
         );

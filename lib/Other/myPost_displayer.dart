@@ -19,7 +19,12 @@ class MyPostsDisplayer extends StatelessWidget {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  Text("City: " + currPost.city),
+                  Text(currPost.selectedRink),
+                  Text(currPost.city),
+                ],
+              ),
+              Column(
+                children: <Widget>[
                   Text("Price: " + currPost.price.toString()),
                   Text("Description: " + currPost.description),
                   ButtonBar(

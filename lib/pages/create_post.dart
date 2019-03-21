@@ -21,6 +21,8 @@ class _PostCreatePageState extends State<PostCreatePage> {
   final Map<String, dynamic> _formData = {
     "city": null,
     "date": DateTime.now(),
+    "day": DateTime.now(),
+    "time": TimeOfDay(hour: 18, minute: 0),
     "description": null,
     "selectedRink": null,
     "price": null,
@@ -28,6 +30,11 @@ class _PostCreatePageState extends State<PostCreatePage> {
 
 //METHOD
   void _submitForm(Function addPost) {
+    _formData["date"] = _formData["day"];
+    print(_formData["time"].hour);
+    _formData["date"].add(Duration(
+        hours: _formData["time"].hour, minutes: _formData["time"].minute));
+    print(_formData["date"]);
     if (!_formKey.currentState.validate()) {
       return;
     }
@@ -72,7 +79,6 @@ class _PostCreatePageState extends State<PostCreatePage> {
   //BUILD METHOD
   @override
   Widget build(BuildContext context) {
-    DateTime day;
     return Container(
       margin: EdgeInsets.all(10.0),
       child: Form(
@@ -138,9 +144,8 @@ class _PostCreatePageState extends State<PostCreatePage> {
                         initialDate: DateTime.now(),
                         context: context)
                     .then((DateTime result) {
-                  day = result;
+                  _formData["day"] = result;
                 });
-                ;
               },
             ),
             RaisedButton(
@@ -149,12 +154,11 @@ class _PostCreatePageState extends State<PostCreatePage> {
               textColor: Colors.white,
               onPressed: () {
                 showTimePicker(
-                  initialTime: TimeOfDay(hour: 15, minute: 0),
+                  initialTime: TimeOfDay(hour: 18, minute: 0),
                   context: context,
                 ).then((TimeOfDay result) {
-                  day = day.add(
-                      Duration(hours: result.hour, minutes: result.minute));
-                  _formData["date"] = day;
+                  print(result);
+                  _formData["time"] = result;
                 });
               },
             ),

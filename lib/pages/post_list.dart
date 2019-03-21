@@ -68,31 +68,61 @@ class PostListPageState extends State<PostListPage> {
               ),
               controller: controller,
             ),
-            IntrinsicHeight(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Expanded(
-                      child: Text(
-                    "Filters",
-                    textAlign: TextAlign.center,
-                    //style: TextStyle(fontWeight: FontWeight.bold)
-                  )),
-                  Expanded(
-                    child: DropdownButton<String>(
-                      value: sortBy,
-                      items: filterOptions,
-                      onChanged: (String newValue) {
-                        setState(() {
-                          print("in button set state");
-                          sortBy = newValue;
-                        });
-                      },
+                  Container(),
+                  IntrinsicHeight(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "Sort",
+                          textAlign: TextAlign.center,
+                          //style: TextStyle(fontWeight: FontWeight.bold)
+                        ),
+                        Expanded(
+                          child: DropdownButton<String>(
+                            value: sortBy,
+                            items: filterOptions,
+                            onChanged: (String newValue) {
+                              setState(() {
+                                print("in button set state");
+                                sortBy = newValue;
+                              });
+                            },
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
-            ),
+                  ),
+                  Container(),
+                  IntrinsicHeight(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "Filter",
+                          textAlign: TextAlign.center,
+                          //style: TextStyle(fontWeight: FontWeight.bold)
+                        ),
+                        Expanded(
+                          child: DropdownButton<String>(
+                            value: sortBy,
+                            items: filterOptions,
+                            onChanged: (String newValue) {
+                              setState(() {
+                                print("in button set state");
+                                sortBy = newValue;
+                              });
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(),
+                ]),
             Expanded(child: PostDisplayer(filter))
           ],
         ));
