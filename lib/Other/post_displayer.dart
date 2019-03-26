@@ -9,18 +9,25 @@ import '../types/post.dart';
 //import 'types/post.dart';
 
 class PostDisplayer extends StatelessWidget {
-  String filter;
-  PostDisplayer(this.filter);
+  String searchFilter;
+  List selectedCities;
+  PostDisplayer(this.searchFilter, this.selectedCities);
 
   //method
   Widget _buildPostItem(BuildContext context, int index) {
     return ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
       final Post currPost = model.allPosts[index];
-      if (filter == null ||
-          filter == "" ||
-          currPost.selectedRink.toLowerCase().contains(filter.toLowerCase())) {
+      if ((searchFilter == null ||
+                  searchFilter == "" ||
+                  currPost.selectedRink
+                      .toLowerCase()
+                      .contains(searchFilter.toLowerCase())) &&
+              selectedCities.contains(currPost.city) ||
+          selectedCities.length == 0) {
         return Card(
+          borderOnForeground: true,
+          color: Colors.white54,
           child: Row(
             children: <Widget>[
               Expanded(
@@ -36,7 +43,8 @@ class PostDisplayer extends StatelessWidget {
                   ),
                   Text(currPost.city),
                   Padding(padding: EdgeInsets.all(8.0)),
-                  Text(DateFormat.MMMd().format(currPost.date)),
+                  Text(DateFormat.MMMd().format(currPost.date),
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   Text(DateFormat.jm().format(currPost.date)),
                 ],
               )),
@@ -45,29 +53,35 @@ class PostDisplayer extends StatelessWidget {
                   child: Column(
                 children: <Widget>[
                   Text('\$' + currPost.price.toString(),
-                      style: TextStyle(color: Colors.green)),
-                  ButtonBar(
-                    alignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      RaisedButton(
-                          color: Colors.lightBlueAccent,
-                          child: Text('Book'),
+                      style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)),
+                  Theme(
+                      data: new ThemeData.dark(),
+                      child: RaisedButton(
+                          color: Theme.of(context).primaryColorDark,
+                          child: Center(
+                              child: Row(
+                            children: <Widget>[
+                              Icon(Icons.arrow_forward),
+                              Text('    Book'),
+                            ],
+                          )),
                           onPressed: () {
                             model.selectPost(currPost.id);
                             Navigator.pushNamed<bool>(
                                 context, '/post/' + currPost.id);
                           }
                           //specifying a page to push to stack?,
-                          )
-                    ],
-                  ),
+                          ))
                 ],
               ))
             ],
           ),
         );
       }
-      return Card();
+      return Container();
     });
   }
 
@@ -82,6 +96,7 @@ class PostDisplayer extends StatelessWidget {
     } else {
       postCards = Container();
     }
+
     return postCards;
   }
 
@@ -91,7 +106,6 @@ class PostDisplayer extends StatelessWidget {
     print('[Products Widget] build()');
     return ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
-      print("in builddddd");
       return _buildPostList(model.allPosts);
     });
   }

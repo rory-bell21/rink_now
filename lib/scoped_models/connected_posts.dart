@@ -66,12 +66,14 @@ mixin PostsModel on ConnectedPosts {
               (a, b) => a.city.toLowerCase().compareTo(b.city.toLowerCase()));
         }
         break;
-      case "Description":
+      case "Date":
         {
-          posts
-            ..sort((a, b) => a.description
-                .toLowerCase()
-                .compareTo(b.description.toLowerCase()));
+          posts..sort((a, b) => a.date.compareTo(b.date));
+        }
+        break;
+      case "Price":
+        {
+          posts..sort((a, b) => a.price.compareTo(b.price));
         }
         break;
       default:
@@ -207,7 +209,8 @@ mixin PostsModel on ConnectedPosts {
 //USER MODEL********************************
 mixin UserModel on ConnectedPosts {
   Future<Map<String, dynamic>> login(String email, String password) async {
-    authenticatedUser = User(email: email, password: password, id: null);
+    authenticatedUser =
+        User(email: email, password: password, id: null, name: null);
     _isLoading = true;
     notifyListeners();
     final Map<String, dynamic> authData = {
@@ -237,13 +240,16 @@ mixin UserModel on ConnectedPosts {
     return {'success': !hasError, 'message': message};
   }
 
-  Future<Map<String, dynamic>> signup(String email, String password) async {
-    authenticatedUser = User(email: email, password: password, id: null);
+  Future<Map<String, dynamic>> signup(
+      String email, String password, String name) async {
+    authenticatedUser =
+        User(email: email, password: password, id: null, name: name);
     _isLoading = true;
     notifyListeners();
     final Map<String, dynamic> authData = {
       'email': email,
       'password': password,
+      'name': name,
       'returnSecureToken': true
     };
     final http.Response response = await http.post(

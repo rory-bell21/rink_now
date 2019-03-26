@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:rink_now/scoped_models/main_model.dart';
 
 import 'package:rink_now/widgets/hamburger_menu.dart';
@@ -20,14 +21,22 @@ class PostListPage extends StatefulWidget {
 }
 
 class PostListPageState extends State<PostListPage> {
+  String _selectedType = "Date";
+
+//CHANGE THESE
+  List _selectedCities;
+  String _myActivitiesResult;
+
   TextEditingController controller = new TextEditingController();
-  String filter;
+  String searchFilter;
+  String optionFilter = "None";
   String sortBy = "Date";
   @override
   void initState() {
+    _selectedCities = [];
     controller.addListener(() {
       setState(() {
-        filter = controller.text;
+        searchFilter = controller.text;
       });
     });
     super.initState();
@@ -39,92 +48,133 @@ class PostListPageState extends State<PostListPage> {
     super.dispose();
   }
 
+  Widget dropDownSort() {
+    IconData _selectedIcon;
+    final Map<String, IconData> _data = Map.fromIterables(
+        ['Date', 'Price', 'City'],
+        [Icons.date_range, Icons.monetization_on, Icons.location_city]);
+    List<DropdownMenuItem<String>> itms = _data.keys.map((String val) {
+      return DropdownMenuItem<String>(
+        value: val,
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: Icon(_data[val]),
+            ),
+            Text(val),
+          ],
+        ),
+      );
+    }).toList();
+
+    return Theme(
+        child: Container(
+          padding: EdgeInsets.all(10.0),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+                value: _selectedType,
+                items: itms,
+                hint: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Icon(_selectedIcon ?? _data.values.toList()[0]),
+                    ),
+                    Text(_selectedType ?? _data.keys.toList()[0]),
+                  ],
+                ),
+                onChanged: (String val) {
+                  setState(() {
+                    _selectedType = val;
+                    _selectedIcon = _data[val];
+                    sortBy = val;
+                  });
+                }),
+          ),
+        ),
+        data: new ThemeData.dark());
+  }
+
+  Widget dropDownCitySelect() {
+    return MultiSelectFormField(
+      autovalidate: false,
+      titleText: 'Filter By City',
+      dataSource: [
+        {
+          "display": "Toronto",
+          "value": "Toronto",
+        },
+        {
+          "display": "Oakville",
+          "value": "Oakville",
+        },
+        {
+          "display": "Etobicoke",
+          "value": "Etobicoke",
+        },
+        {
+          "display": "Vaughn",
+          "value": "Vaughn",
+        },
+        {
+          "display": "Mississauga",
+          "value": "Mississauga",
+        },
+        {
+          "display": "Oshawa",
+          "value": "Oshawa",
+        },
+        {
+          "display": "North York",
+          "value": "North York",
+        },
+      ],
+      textField: 'display',
+      valueField: 'value',
+      okButtonLabel: 'OK',
+      cancelButtonLabel: 'CANCEL',
+      // required: true,
+      hintText: '',
+      value: _selectedCities,
+      onSaved: (selects) {
+        print(selects);
+        if (selects == null) return;
+        setState(() {
+          _selectedCities = selects;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     widget.model.fetchPosts(sortBy);
-
-    List<DropdownMenuItem<String>> filterOptions = [
-      DropdownMenuItem<String>(value: "Date", child: Text("Date")),
-      DropdownMenuItem<String>(
-          value: "Description", child: Text("Description")),
-      DropdownMenuItem<String>(value: "City", child: Text("City"))
-    ];
     return Scaffold(
-        drawer: HamburgerMenu("anything here rn"),
-        appBar: AppBar(
-          title: Text('SportsNow'),
-        ),
-        body: Column(
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                labelText: "",
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(
-                    const Radius.circular(10.0),
-                  ),
-                ),
+      drawer: HamburgerMenu("anything here rn"),
+      appBar: AppBar(
+        actions: <Widget>[dropDownSort()],
+        title: Text('SportsNow'),
+      ),
+      body: Column(children: [
+        Container(
+            child: TextField(
+          /* style:
+                  TextStyle(fontSize: 20.0, height: 0.1, color: Colors.black), */
+          decoration: InputDecoration(
+            labelText: "",
+            prefixIcon: Icon(Icons.search),
+            border: OutlineInputBorder(
+              borderRadius: const BorderRadius.all(
+                const Radius.circular(10.0),
               ),
-              controller: controller,
             ),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(),
-                  IntrinsicHeight(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "Sort",
-                          textAlign: TextAlign.center,
-                          //style: TextStyle(fontWeight: FontWeight.bold)
-                        ),
-                        Expanded(
-                          child: DropdownButton<String>(
-                            value: sortBy,
-                            items: filterOptions,
-                            onChanged: (String newValue) {
-                              setState(() {
-                                print("in button set state");
-                                sortBy = newValue;
-                              });
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(),
-                  IntrinsicHeight(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "Filter",
-                          textAlign: TextAlign.center,
-                          //style: TextStyle(fontWeight: FontWeight.bold)
-                        ),
-                        Expanded(
-                          child: DropdownButton<String>(
-                            value: sortBy,
-                            items: filterOptions,
-                            onChanged: (String newValue) {
-                              setState(() {
-                                print("in button set state");
-                                sortBy = newValue;
-                              });
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(),
-                ]),
-            Expanded(child: PostDisplayer(filter))
-          ],
-        ));
+          ),
+          controller: controller,
+        )),
+        dropDownCitySelect(),
+        Expanded(child: PostDisplayer(searchFilter, _selectedCities))
+      ]),
+    );
   }
 }

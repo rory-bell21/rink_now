@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:rink_now/scoped_models/main_model.dart';
+import 'package:multiselect_formfield/multiselect_formfield.dart';
 
 import '../types/post.dart';
 
@@ -15,14 +17,23 @@ class PostCreatePage extends StatefulWidget {
 List<String> rinks = ["Canlan", "Port Credit", "Scotia", null];
 
 class _PostCreatePageState extends State<PostCreatePage> {
+  List<DropdownMenuItem<String>> cityOptions = [
+    DropdownMenuItem<String>(value: "Other", child: Text("Other")),
+    DropdownMenuItem<String>(value: "Oakville", child: Text("Oakville")),
+    DropdownMenuItem<String>(value: "Toronto", child: Text("Toronto")),
+    DropdownMenuItem<String>(value: "Etobicoke", child: Text("Etobicoke")),
+    DropdownMenuItem<String>(value: "Vaughn", child: Text("Vaughn")),
+    DropdownMenuItem<String>(value: "Mississauga", child: Text("Mississauga")),
+    DropdownMenuItem<String>(value: "Oshawa", child: Text("Oshawa")),
+    DropdownMenuItem<String>(value: "North York", child: Text("North York")),
+  ];
+
   double _currentPrice = 100;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //List<String> rinks = ["Canlan", "Port Credit", "Scotia"];
   final Map<String, dynamic> _formData = {
     "city": null,
     "date": DateTime.now(),
-    "day": DateTime.now(),
-    "time": TimeOfDay(hour: 18, minute: 0),
     "description": null,
     "selectedRink": null,
     "price": null,
@@ -30,11 +41,6 @@ class _PostCreatePageState extends State<PostCreatePage> {
 
 //METHOD
   void _submitForm(Function addPost) {
-    _formData["date"] = _formData["day"];
-    print(_formData["time"].hour);
-    _formData["date"].add(Duration(
-        hours: _formData["time"].hour, minutes: _formData["time"].minute));
-    print(_formData["date"]);
     if (!_formKey.currentState.validate()) {
       return;
     }
@@ -76,9 +82,10 @@ class _PostCreatePageState extends State<PostCreatePage> {
     });
   }
 
-  //BUILD METHOD
+  //BUILD METHO
   @override
   Widget build(BuildContext context) {
+    List _myActivities;
     return Container(
       margin: EdgeInsets.all(10.0),
       child: Form(
@@ -94,17 +101,6 @@ class _PostCreatePageState extends State<PostCreatePage> {
               },
               onSaved: (String value) {
                 _formData["selectedRink"] = value;
-              },
-            ),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Post City'),
-              validator: (String value) {
-                if (value.trim().length <= 0) {
-                  return 'City is required';
-                }
-              },
-              onSaved: (String value) {
-                _formData["city"] = value;
               },
             ),
             TextFormField(
@@ -129,43 +125,67 @@ class _PostCreatePageState extends State<PostCreatePage> {
             SizedBox(
               height: 10.0,
             ),
-            Center(child: Container(child: Text(_formData['date'].toString()))),
-            SizedBox(
-              height: 10.0,
-            ),
-            RaisedButton(
-              child: Text('Select Date'),
-              color: Theme.of(context).accentColor,
-              textColor: Colors.white,
-              onPressed: () {
-                showDatePicker(
-                        firstDate: DateTime.now().add(new Duration(days: -60)),
-                        lastDate: DateTime.now().add(new Duration(days: 60)),
-                        initialDate: DateTime.now(),
-                        context: context)
-                    .then((DateTime result) {
-                  _formData["day"] = result;
-                });
-              },
-            ),
-            RaisedButton(
-              child: Text('Select Time'),
-              color: Theme.of(context).accentColor,
-              textColor: Colors.white,
-              onPressed: () {
-                showTimePicker(
-                  initialTime: TimeOfDay(hour: 18, minute: 0),
-                  context: context,
-                ).then((TimeOfDay result) {
-                  print(result);
-                  _formData["time"] = result;
-                });
-              },
+            Column(
+              children: <Widget>[
+                Text("Select City: "),
+                DropdownButton<String>(
+                  isExpanded: false,
+                  value: "Other",
+                  items: cityOptions,
+                  onChanged: (String newValue) {
+                    setState(() {
+                      _formData["city"] = newValue;
+                    });
+                  },
+                ),
+                //data: new ThemeData.dark()),
+              ],
             ),
             SizedBox(
               height: 10.0,
             ),
-            _buildSubmitButton(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                RaisedButton(
+                  child: Text('Select Date'),
+                  color: Theme.of(context).primaryColorDark,
+                  textColor: Colors.white,
+                  onPressed: () {
+                    showDatePicker(
+                            firstDate:
+                                DateTime.now().add(new Duration(days: -60)),
+                            lastDate:
+                                DateTime.now().add(new Duration(days: 60)),
+                            initialDate: DateTime.now(),
+                            context: context)
+                        .then((DateTime selectedDate) {
+                      showTimePicker(
+                        initialTime: TimeOfDay(hour: 18, minute: 0),
+                        context: context,
+                      ).then((TimeOfDay selectedTime) {
+                        print(selectedTime);
+                        _formData["date"] = selectedDate.add(Duration(
+                            hours: selectedTime.hour,
+                            minutes: selectedTime.minute));
+                      });
+                    });
+                  },
+                ),
+                Container(),
+                Container(
+                    child: Text(
+                  DateFormat.MMMd().format(_formData[
+                          'date']) + //how to get this to update when date is selected, might need to make a new widget
+                      ", " +
+                      DateFormat.jm().format(_formData['date']),
+                ))
+              ],
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Container(child: _buildSubmitButton()),
           ],
         ),
       ),

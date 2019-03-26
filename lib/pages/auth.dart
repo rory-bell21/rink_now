@@ -15,6 +15,7 @@ class _AuthPageState extends State<AuthPage> {
   final Map<String, dynamic> _formData = {
     'email': null,
     'password': null,
+    'name': null,
     'acceptTerms': false
   };
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -83,6 +84,23 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
+  Widget _buildNameTextField() {
+    return TextFormField(
+      decoration: InputDecoration(
+          labelText: 'First and Last Name',
+          filled: true,
+          fillColor: Colors.white),
+      validator: (String value) {
+        if (value.isEmpty || !value.contains(" ")) {
+          return 'Invalid First and Last Name';
+        }
+      },
+      onSaved: (String value) {
+        _formData['name'] = value;
+      },
+    );
+  }
+
   //Will need some terms and conditions for them to accept
   Widget _buildAcceptSwitch() {
     return SwitchListTile(
@@ -107,8 +125,9 @@ class _AuthPageState extends State<AuthPage> {
       successInformation = await login(
           _formData['email'], _formData['password']); //connected_posts
     } else {
-      successInformation =
-          await signup(_formData['email'], _formData['password']);
+      //SIGNUP:
+      successInformation = await signup(
+          _formData['email'], _formData['password'], _formData['name']);
     }
     if (successInformation['success']) {
       Navigator.pushReplacementNamed(context, '/products');
@@ -156,6 +175,12 @@ class _AuthPageState extends State<AuthPage> {
                 child: Column(
                   children: <Widget>[
                     _buildEmailTextField(),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    _authMode == AuthMode.Signup
+                        ? _buildNameTextField()
+                        : Container(),
                     SizedBox(
                       height: 10.0,
                     ),
