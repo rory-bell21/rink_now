@@ -17,6 +17,7 @@ class PostCreatePage extends StatefulWidget {
 List<String> rinks = ["Canlan", "Port Credit", "Scotia", null];
 
 class _PostCreatePageState extends State<PostCreatePage> {
+  String selectedCity = "Other";
   List<DropdownMenuItem<String>> cityOptions = [
     DropdownMenuItem<String>(value: "Other", child: Text("Other")),
     DropdownMenuItem<String>(value: "Oakville", child: Text("Oakville")),
@@ -85,7 +86,6 @@ class _PostCreatePageState extends State<PostCreatePage> {
   //BUILD METHO
   @override
   Widget build(BuildContext context) {
-    List _myActivities;
     return Container(
       margin: EdgeInsets.all(10.0),
       child: Form(
@@ -130,10 +130,11 @@ class _PostCreatePageState extends State<PostCreatePage> {
                 Text("Select City: "),
                 DropdownButton<String>(
                   isExpanded: false,
-                  value: "Other",
+                  value: selectedCity,
                   items: cityOptions,
                   onChanged: (String newValue) {
                     setState(() {
+                      selectedCity = newValue;
                       _formData["city"] = newValue;
                     });
                   },

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rink_now/pages/create_post.dart';
-import 'package:rink_now/pages/edit_post.dart';
 import 'package:rink_now/pages/my_posts.dart';
 import 'package:rink_now/scoped_models/main_model.dart';
 

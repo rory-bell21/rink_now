@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:rink_now/scoped_models/main_model.dart';
 
@@ -15,37 +16,50 @@ class MyPostsDisplayer extends StatelessWidget {
       if (model.posts[index].userEmail == model.authenticatedUser.email) {
         final Post currPost = model.posts[index];
         return Card(
-          child: Row(
-            children: <Widget>[
-              Column(
+            borderOnForeground: true,
+            color: Colors.white54,
+            child: Row(children: <Widget>[
+              Expanded(
+                  child: Column(
                 children: <Widget>[
-                  Text(currPost.selectedRink),
-                  Text(currPost.city),
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  Text("Price: " + currPost.price.toString()),
-                  Text("Description: " + currPost.description),
-                  ButtonBar(
-                    alignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      RaisedButton(
-                          child: Text('Edit'),
-                          onPressed: () {
-                            model.selectPost(currPost.id);
-                            Navigator.pushNamed<bool>(
-                                context, '/edit/' + currPost.id);
-                          }
-                          //specifying a page to push to stack?,
-                          )
-                    ],
+                  Text(
+                    currPost.selectedRink,
+                    style: TextStyle(
+                        fontFamily: 'Oswald',
+                        color: Colors.blue,
+                        fontSize: 15.0),
+                    textAlign: TextAlign.left,
                   ),
+                  Text(currPost.city),
+                  Padding(padding: EdgeInsets.all(8.0)),
+                  Text(DateFormat.MMMd().format(currPost.date),
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(DateFormat.jm().format(currPost.date)),
                 ],
+              )),
+              Expanded(child: Container()),
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    Text('\$' + currPost.price.toString(),
+                        style: TextStyle(
+                            fontFamily: 'Oswald',
+                            color: Colors.green,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
+                    RaisedButton(
+                        child: Text('Edit'),
+                        onPressed: () {
+                          model.selectPost(currPost.id);
+                          Navigator.pushNamed<bool>(
+                              context, '/edit/' + currPost.id);
+                        }
+                        //specifying a page to push to stack?,
+                        )
+                  ],
+                ),
               )
-            ],
-          ),
-        );
+            ]));
       } else {
         return Container();
       }
@@ -70,7 +84,6 @@ class MyPostsDisplayer extends StatelessWidget {
   //BUILD Method
   @override
   Widget build(BuildContext context) {
-    print('[Products Widget] build()');
     return ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
       return _buildPostList(model.posts);

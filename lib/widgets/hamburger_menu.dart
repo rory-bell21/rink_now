@@ -35,7 +35,7 @@ class HamburgerMenu extends StatelessWidget {
               Navigator.pushReplacementNamed(context, '/boookings');
             },
           ),
-           ListTile(
+          ListTile(
             leading: Icon(Icons.info),
             title: Text('Info'),
             onTap: () {

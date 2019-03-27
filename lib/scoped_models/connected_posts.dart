@@ -80,14 +80,6 @@ mixin PostsModel on ConnectedPosts {
         {}
         break;
     }
-/*
-    if (sortBy == "Title") {
-      posts.sort(
-          (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
-    } else {
-      print("IN THE ELSE");
-      posts..sort((a, b) => a.description.compareTo(b.description));
-    }*/
   }
 
   //get all the posts in a list
@@ -122,7 +114,7 @@ mixin PostsModel on ConnectedPosts {
       'description': description,
       'price': price,
       'date': date.toString(),
-      'selectedRink': selectedPost.selectedRink,
+      'selectedRink': selectedRink,
       'userEmail': authenticatedUser.email,
       'userID': authenticatedUser.id
     };
@@ -178,29 +170,17 @@ mixin PostsModel on ConnectedPosts {
     notifyListeners();
   }
 
-  //do we need?
-  /*Post get selectedMyPost {
-    if (selMyPostIndex == null) {
-      return null;
-    }
-    return myPosts[selMyPostIndex];
-  }*/
-  //int get selectedMyPostIndex {
-  //  return selMyPostIndex;
-  //}
-
   //need
   int get selectedPostIndex {
     return selPostIndex;
   }
 
-  void deletePost(int index) {
-    final deletedPostID = selectedPost;
+  void deletePost(String postID) {
     http
         .delete(
             'https://sportsnow-4e1cf.firebaseio.com/posts/${selectedPost.id}.json')
         .then((http.Response response) {
-      posts.removeAt(index);
+      //posts.removeAt(index);
     });
     notifyListeners();
   }

@@ -147,15 +147,29 @@ class PostListPageState extends State<PostListPage> {
     );
   }
 
+  Widget refreshButton() {
+    return IconButton(
+      icon: Icon(
+        Icons.refresh,
+        color: Colors.white,
+      ),
+      onPressed: () {
+        widget.model.fetchPosts(sortBy);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     widget.model.fetchPosts(sortBy);
     return Scaffold(
       drawer: HamburgerMenu("anything here rn"),
       appBar: AppBar(
-        actions: <Widget>[dropDownSort()],
-        title: Text('SportsNow'),
-      ),
+          //leading: refreshButton(),
+          actions: <Widget>[refreshButton(), dropDownSort()],
+          title: Row(children: <Widget>[
+            Text('Postings'),
+          ])),
       body: Column(children: [
         Container(
             child: TextField(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:rink_now/scoped_models/main_model.dart';
@@ -7,7 +8,9 @@ import '../types/post.dart';
 
 class PostEditPage extends StatefulWidget {
   final String postID;
-  PostEditPage(this.postID);
+  final MainModel model;
+
+  PostEditPage(this.postID, this.model);
 
   @override
   State<StatefulWidget> createState() {
@@ -18,16 +21,40 @@ class PostEditPage extends StatefulWidget {
 List<String> rinks = ["Canlan", "Port Credit", "Scotia", null];
 
 class _PostEditPageState extends State<PostEditPage> {
-  double _currentPrice = 100;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  //List<String> rinks = ["Canlan", "Port Credit", "Scotia"];
+  Post currPost;
+  String currCity;
+  List<DropdownMenuItem<String>> cityOptions = [
+    DropdownMenuItem<String>(value: "Other", child: Text("Other")),
+    DropdownMenuItem<String>(value: "Oakville", child: Text("Oakville")),
+    DropdownMenuItem<String>(value: "Toronto", child: Text("Toronto")),
+    DropdownMenuItem<String>(value: "Etobicoke", child: Text("Etobicoke")),
+    DropdownMenuItem<String>(value: "Vaughn", child: Text("Vaughn")),
+    DropdownMenuItem<String>(value: "Mississauga", child: Text("Mississauga")),
+    DropdownMenuItem<String>(value: "Oshawa", child: Text("Oshawa")),
+    DropdownMenuItem<String>(value: "North York", child: Text("North York")),
+  ];
+
   final Map<String, dynamic> _formData = {
     "city": null,
     "date": DateTime.now(),
     "description": null,
-    "selectedRink": "Canlan",
+    "selectedRink": null,
     "price": null,
   };
+  @override
+  void initState() {
+    currPost = widget.model.selectedPost;
+    _formData["price"] = currPost.price;
+    _formData["city"] = currPost.city;
+    _formData["selectedRink"] = currPost.selectedRink;
+    _formData["description"] = currPost.description;
+    _formData["date"] = currPost.date;
+    currCity = currPost.city;
+    super.initState();
+  }
+
+  double _currentPrice = 100;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //METHOD need this to delete current post and return to edit page
   _showWarningDialog(BuildContext context) {
     showDialog(
@@ -46,6 +73,8 @@ class _PostEditPageState extends State<PostEditPage> {
               FlatButton(
                 child: Text('CONTINUE'),
                 onPressed: () {
+                  widget.model.deletePost(currPost.id);
+                  widget.model.fetchPosts("Date");
                   Navigator.pop(context);
                   Navigator.pop(context, true);
                 },
@@ -61,29 +90,23 @@ class _PostEditPageState extends State<PostEditPage> {
       return;
     }
     _formKey.currentState.save();
-    updatePost(
-        _formData['city'],
-        _formData['description'],
-        _formData['selectedRink'],
-        _formData["date"],
-        _formData['image'],
-        _formData['price']);
+    print(_formData);
+    updatePost(_formData['city'], _formData['description'],
+        _formData['selectedRink'], _formData["date"], _formData['price']);
+    widget.model.fetchPosts("Date");
     Navigator.pop(context);
   }
 
 //WIDGET
   Widget _buildSubmitButton() {
-    return ScopedModelDescendant<MainModel>(//might be able to gas this........
-        builder: (BuildContext context, Widget child, MainModel model) {
-      return RaisedButton(
-        child: Text('Save'),
-        color: Theme.of(context).primaryColorDark,
-        textColor: Colors.white,
-        onPressed: () {
-          _submitForm(model.updatePost);
-        },
-      );
-    });
+    return RaisedButton(
+      child: Text('Save'),
+      color: Theme.of(context).primaryColorDark,
+      textColor: Colors.white,
+      onPressed: () {
+        _submitForm(widget.model.updatePost);
+      },
+    );
   }
 
   void _showDialog() {
@@ -106,26 +129,12 @@ class _PostEditPageState extends State<PostEditPage> {
   //BUILD METHOD
   @override
   Widget build(BuildContext context) {
-    DateTime day;
-    List<DropdownMenuItem<String>> mydrop = [
-      DropdownMenuItem<String>(child: Text("canlan")),
-      DropdownMenuItem<String>(child: Text("port credit")),
-      DropdownMenuItem<String>(child: Text("IceLand")),
-      DropdownMenuItem<String>(child: Text("F"))
-    ];
-
     return WillPopScope(onWillPop: () {
       print('Back button pressed!');
       Navigator.pop(context, false);
-      return Future.value(false);
+      //return Future.value(false);
     }, child: Container(child: ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
-      model.selectPost(widget.postID);
-      final Post currPost = model.selectedPost;
-      _formData["price"] = currPost.price;
-      _formData["city"] = currPost.city;
-      _formData["description"] = currPost.description;
-      _formData["date"] = currPost.date;
       return Scaffold(
           appBar: AppBar(
             title: Text(currPost.city),
@@ -137,21 +146,21 @@ class _PostEditPageState extends State<PostEditPage> {
               child: ListView(
                 children: <Widget>[
                   TextFormField(
-                    initialValue: currPost.city,
-                    decoration: InputDecoration(labelText: "City"),
+                    initialValue: currPost.selectedRink,
+                    decoration: InputDecoration(labelText: 'Rink'),
                     validator: (String value) {
                       if (value.trim().length <= 0) {
-                        return 'City is required';
+                        return 'Rink is required';
                       }
                     },
                     onSaved: (String value) {
-                      _formData["City"] = value;
+                      _formData["selectedRink"] = value;
                     },
                   ),
                   TextFormField(
-                    maxLines: 4,
                     initialValue: currPost.description,
-                    decoration: InputDecoration(labelText: "description"),
+                    maxLines: 4,
+                    decoration: InputDecoration(labelText: 'Post Description'),
                     validator: (String value) {
                       if (value.trim().length <= 0) {
                         return 'Description is required';
@@ -162,61 +171,84 @@ class _PostEditPageState extends State<PostEditPage> {
                     },
                   ),
                   TextFormField(
-                      initialValue: currPost.price.toString(),
-                      decoration: new InputDecoration(labelText: "Price"),
-                      keyboardType: TextInputType.number),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Center(
-                      child: Container(child: Text(currPost.date.toString()))),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  RaisedButton(
-                    child: Text('Select Date'),
-                    color: Theme.of(context).accentColor,
-                    textColor: Colors.white,
-                    onPressed: () {
-                      showDatePicker(
-                              firstDate:
-                                  DateTime.now().add(new Duration(days: -60)),
-                              lastDate:
-                                  DateTime.now().add(new Duration(days: 60)),
-                              initialDate: currPost.date,
-                              context: context)
-                          .then((DateTime result) {
-                        day = result;
-                      });
-                      ;
-                    },
-                  ),
-                  RaisedButton(
-                    child: Text(currPost.date.toString()),
-                    color: Theme.of(context).accentColor,
-                    textColor: Colors.white,
-                    onPressed: () {
-                      showTimePicker(
-                        initialTime: TimeOfDay(hour: 15, minute: 0),
-                        context: context,
-                      ).then((TimeOfDay result) {
-                        day = day.add(Duration(
-                            hours: result.hour, minutes: result.minute));
-                        _formData["date"] = day;
-                      });
+                    initialValue: currPost.price.toString(),
+                    decoration: new InputDecoration(labelText: "Enter Price"),
+                    keyboardType: TextInputType.number,
+                    onSaved: (String value) {
+                      _formData["price"] = double.parse(value);
                     },
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  _buildSubmitButton(),
-                  Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: RaisedButton(
-                      color: Colors.redAccent,
-                      child: Text('DELETE Does not work'),
-                      onPressed: () => _showWarningDialog(context),
-                    ),
+                  Column(
+                    children: <Widget>[
+                      Text("Select City: "),
+                      DropdownButton<String>(
+                        isExpanded: false,
+                        value: currCity,
+                        items: cityOptions,
+                        onChanged: (String newValue) {
+                          setState(() {
+                            currCity = newValue;
+                            _formData["city"] = newValue;
+                          });
+                        },
+                      ),
+                      //data: new ThemeData.dark()),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      RaisedButton(
+                        child: Text('Select Date'),
+                        color: Theme.of(context).primaryColorDark,
+                        textColor: Colors.white,
+                        onPressed: () {
+                          showDatePicker(
+                                  firstDate: DateTime.now()
+                                      .add(new Duration(days: -60)),
+                                  lastDate: DateTime.now()
+                                      .add(new Duration(days: 60)),
+                                  initialDate: DateTime.now(),
+                                  context: context)
+                              .then((DateTime selectedDate) {
+                            showTimePicker(
+                              initialTime: TimeOfDay(hour: 18, minute: 0),
+                              context: context,
+                            ).then((TimeOfDay selectedTime) {
+                              print(selectedTime);
+                              _formData["date"] = selectedDate.add(Duration(
+                                  hours: selectedTime.hour,
+                                  minutes: selectedTime.minute));
+                            });
+                          });
+                        },
+                      ),
+                      Container(),
+                      Container(
+                          child: Text(
+                        DateFormat.MMMd().format(_formData[
+                                'date']) + //how to get this to update when date is selected, might need to make a new widget
+                            ", " +
+                            DateFormat.jm().format(_formData['date']),
+                      ))
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Container(child: _buildSubmitButton()),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  RaisedButton(
+                    child: Text('DELETE POST'),
+                    onPressed: () => _showWarningDialog(context),
                   ),
                 ],
               ),

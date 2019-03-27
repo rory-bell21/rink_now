@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
               print("innnnnn");
               final String postID = pathElements[2];
               return MaterialPageRoute<bool>(
-                builder: (BuildContext context) => PostEditPage(postID),
+                builder: (BuildContext context) => PostEditPage(postID, model),
               );
             }
             return null;
