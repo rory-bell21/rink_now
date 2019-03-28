@@ -21,6 +21,7 @@ class PostEditPage extends StatefulWidget {
 List<String> rinks = ["Canlan", "Port Credit", "Scotia", null];
 
 class _PostEditPageState extends State<PostEditPage> {
+  DateTime newDate;
   Post currPost;
   String currCity;
   List<DropdownMenuItem<String>> cityOptions = [
@@ -206,6 +207,10 @@ class _PostEditPageState extends State<PostEditPage> {
                     children: <Widget>[
                       RaisedButton(
                         child: Text('Select Date'),
+                        /* DateFormat.MMMd().format(_formData[
+                                'date']) + //how to get this to update when date is selected, might need to make a new widget
+                            ", " +
+                            DateFormat.jm().format(_formData['date'])) */
                         color: Theme.of(context).primaryColorDark,
                         textColor: Colors.white,
                         onPressed: () {
@@ -222,10 +227,13 @@ class _PostEditPageState extends State<PostEditPage> {
                               context: context,
                             ).then((TimeOfDay selectedTime) {
                               print(selectedTime);
-                              _formData["date"] = selectedDate.add(Duration(
+                              newDate = selectedDate.add(Duration(
                                   hours: selectedTime.hour,
                                   minutes: selectedTime.minute));
                             });
+                          });
+                          setState(() {
+                            _formData["date"] = newDate;
                           });
                         },
                       ),

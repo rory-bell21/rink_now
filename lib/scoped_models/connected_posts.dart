@@ -139,6 +139,9 @@ mixin PostsModel on ConnectedPosts {
 
 //--------------------------------
   void fetchPosts(String sortBy) {
+    _isLoading = true;
+    notifyListeners();
+    print("Fetching Posts");
     http
         .get('https://sportsnow-4e1cf.firebaseio.com/posts.json')
         .then((http.Response response) {
@@ -160,6 +163,7 @@ mixin PostsModel on ConnectedPosts {
       });
       posts = fetchedPosts;
       sortPosts(sortBy);
+      _isLoading = false;
       notifyListeners();
     });
   }

@@ -54,12 +54,14 @@ class PostDisplayer extends StatelessWidget {
                 children: <Widget>[
                   Text('\$' + currPost.price.toString(),
                       style: TextStyle(
-                          color: Colors.green,
+                          //color: Colors.green,
                           fontSize: 20,
                           fontWeight: FontWeight.bold)),
                   Theme(
-                      data: new ThemeData.dark(),
+                      data: ThemeData.dark(),
                       child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0)),
                           color: Theme.of(context).primaryColorDark,
                           child: Center(
                               child: Row(

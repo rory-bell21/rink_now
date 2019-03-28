@@ -17,6 +17,7 @@ class PostCreatePage extends StatefulWidget {
 List<String> rinks = ["Canlan", "Port Credit", "Scotia", null];
 
 class _PostCreatePageState extends State<PostCreatePage> {
+  DateTime newDate;
   String selectedCity = "Other";
   List<DropdownMenuItem<String>> cityOptions = [
     DropdownMenuItem<String>(value: "Other", child: Text("Other")),
@@ -51,7 +52,7 @@ class _PostCreatePageState extends State<PostCreatePage> {
     Navigator.pushReplacementNamed(context, '/posts');
   }
 
-//WIDGET
+//WIDGE
   Widget _buildSubmitButton() {
     return ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
@@ -128,17 +129,20 @@ class _PostCreatePageState extends State<PostCreatePage> {
             Column(
               children: <Widget>[
                 Text("Select City: "),
-                DropdownButton<String>(
-                  isExpanded: false,
-                  value: selectedCity,
-                  items: cityOptions,
-                  onChanged: (String newValue) {
-                    setState(() {
-                      selectedCity = newValue;
-                      _formData["city"] = newValue;
-                    });
-                  },
-                ),
+                Theme(
+                    isMaterialAppTheme: true,
+                    data: ThemeData.fallback(),
+                    child: DropdownButton<String>(
+                      isExpanded: false,
+                      value: selectedCity,
+                      items: cityOptions,
+                      onChanged: (String newValue) {
+                        setState(() {
+                          selectedCity = newValue;
+                          _formData["city"] = newValue;
+                        });
+                      },
+                    )),
                 //data: new ThemeData.dark()),
               ],
             ),
@@ -149,7 +153,12 @@ class _PostCreatePageState extends State<PostCreatePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 RaisedButton(
-                  child: Text('Select Date'),
+                  child: Center(
+                      child: Text('  Select Date\n' +
+                          DateFormat.MMMd().format(_formData[
+                              'date']) + //how to get this to update when date is selected, might need to make a new widget
+                          ", " +
+                          DateFormat.jm().format(_formData['date']))),
                   color: Theme.of(context).primaryColorDark,
                   textColor: Colors.white,
                   onPressed: () {
@@ -165,7 +174,6 @@ class _PostCreatePageState extends State<PostCreatePage> {
                         initialTime: TimeOfDay(hour: 18, minute: 0),
                         context: context,
                       ).then((TimeOfDay selectedTime) {
-                        print(selectedTime);
                         _formData["date"] = selectedDate.add(Duration(
                             hours: selectedTime.hour,
                             minutes: selectedTime.minute));
