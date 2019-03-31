@@ -6,9 +6,11 @@ import 'package:rink_now/pages/manage_posts.dart';
 import 'package:rink_now/pages/my_bookings.dart';
 import 'package:rink_now/pages/post_page.dart';
 import 'package:rink_now/pages/post_list.dart';
+import 'package:rink_now/pages/profile_page.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 import 'package:rink_now/scoped_models/main_model.dart';
+import 'package:stripe_payment/stripe_payment.dart';
 
 // import 'package:flutter/rendering.dart';
 
@@ -16,6 +18,8 @@ void main() {
   // debugPaintSizeEnabled = true;
   // debugPaintBaselinesEnabled = true;
   // debugPaintPointersEnabled = true;
+  StripeSource.setPublishableKey("pk_test");
+
   runApp(MyApp());
 }
 
@@ -48,6 +52,7 @@ class _MyAppState extends State<MyApp> {
             '/bookings': (BuildContext context) => MyBookingsPage(model),
             '/admin': (BuildContext context) => ManagePosts(model),
             '/info': (BuildContext context) => InfoPage(),
+            '/profile': (BuildContext context) => ProfilePage(model),
             //'/post': (BuildContext context) => InfoPage(),
             //'/edit' : (BuildContext context) => PostEditPage(),
           },

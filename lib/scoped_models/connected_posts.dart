@@ -14,7 +14,10 @@ mixin ConnectedPosts on Model {
   int selPostIndex;
   int selMyPostIndex;
   String selPostID;
+}
 
+//*******************************************************POSTMODEL*******************************************************
+mixin PostsModel on ConnectedPosts {
   Future<Null> addPost(String city, String description, String selectedRink,
       DateTime date, double price) {
     Post currPost = Post(
@@ -54,10 +57,7 @@ mixin ConnectedPosts on Model {
       posts.add(newPost);
     });
   }
-}
 
-//*******************************************************POSTMODEL*******************************************************
-mixin PostsModel on ConnectedPosts {
   void sortPosts(String sortBy) {
     switch (sortBy) {
       case "City":
@@ -207,7 +207,9 @@ mixin UserModel on ConnectedPosts {
       body: json.encode(authData),
       headers: {'Content-Type': 'application/json'},
     );
+
     final Map<String, dynamic> responseData = json.decode(response.body);
+    print(responseData);
     bool hasError = true;
     String message = 'Something went wrong.';
     print(responseData);
@@ -226,6 +228,7 @@ mixin UserModel on ConnectedPosts {
 
   Future<Map<String, dynamic>> signup(
       String email, String password, String name) async {
+    print(name + "#######################");
     authenticatedUser =
         User(email: email, password: password, id: null, name: name);
     _isLoading = true;
@@ -233,7 +236,7 @@ mixin UserModel on ConnectedPosts {
     final Map<String, dynamic> authData = {
       'email': email,
       'password': password,
-      'name': name,
+      'displayName': name,
       'returnSecureToken': true
     };
     final http.Response response = await http.post(

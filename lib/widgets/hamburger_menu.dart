@@ -15,7 +15,7 @@ class HamburgerMenu extends StatelessWidget {
             title: Text('Choose'),
           ),
           ListTile(
-            leading: Icon(Icons.bookmark),
+            leading: Icon(Icons.search),
             title: Text('All Posts'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/posts');
@@ -36,6 +36,13 @@ class HamburgerMenu extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: Icon(Icons.person),
+            title: Text('Profile'),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/profile');
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.info),
             title: Text('Info'),
             onTap: () {
@@ -48,7 +55,7 @@ class HamburgerMenu extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacementNamed(context, '/');
             },
-          )
+          ),
         ],
       ),
     ));

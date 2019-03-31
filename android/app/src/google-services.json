@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "229267580338",
+    "firebase_url": "https://sportsnow-4e1cf.firebaseio.com",
+    "project_id": "sportsnow-4e1cf",
+    "storage_bucket": "sportsnow-4e1cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229267580338:android:aeae4f07949e5640",
+        "android_client_info": {
+          "package_name": "com.example.fluttercourse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "229267580338-mf00jht7vkoehhc1t9f0p8fcqbnhb4l6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDf5uvjPBT2VTXctjwm-Y5-N5kBU4vqRDI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

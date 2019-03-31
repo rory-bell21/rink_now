@@ -71,6 +71,8 @@ class PostDisplayer extends StatelessWidget {
                             ],
                           )),
                           onPressed: () {
+                            print(model.authenticatedUser.email);
+                            print(model.authenticatedUser.name);
                             model.selectPost(currPost.id);
                             Navigator.pushNamed<bool>(
                                 context, '/post/' + currPost.id);
