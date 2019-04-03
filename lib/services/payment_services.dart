@@ -1,16 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rink_now/scoped_models/main_model.dart';
 
 class PaymentService {
+  MainModel model;
+  PaymentService(this.model) {}
   addCard(token) {
-    print(FirebaseAuth.instance.currentUser().toString() + "************");
     FirebaseAuth.instance.currentUser().then((user) {
       Firestore.instance
           .collection('cards')
-          .document(user.uid)
+          .document(model.authenticatedUser.id)
           .collection('tokens')
           .add({'tokenId': token}).then((val) {
+        print(val.toString() + "!!!!!!!!!!!");
+        print(model.authenticatedUser.id);
         print('saved');
       });
     });

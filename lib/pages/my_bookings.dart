@@ -20,15 +20,18 @@ class MyBookingsPageState extends State<MyBookingsPage> {
     super.initState();
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: HamburgerMenu("anything for now"),
-        appBar: AppBar(
-          title: Text('My Bookings'),
+      drawer: HamburgerMenu("My Bookings"),
+      appBar: AppBar(
+        title: Text('My Bookings'),
+      ),
+      body: Center(
+        child: Text(
+          "COMING SOON!\nAll bookings a user has made will appear on this page",
+          textAlign: TextAlign.center,
         ),
-        body: Column(
-          children: [Expanded(child: PostDisplayer("CHANGE THIS", []))],
-        ));
+      ),
+    );
   }
 }

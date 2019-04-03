@@ -10,7 +10,18 @@ class InfoPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Information'),
       ),
-      body: Text("Information regarding the app and business will go here"),
+      body: Center(
+          child: Column(children: <Widget>[
+        Container(
+            alignment: Alignment.topCenter,
+            child: Image(
+              image: AssetImage('assets/RinkNowLogo.png'),
+              height: 400,
+              width: 600,
+            )),
+        Text("Information regarding the app and business will go here",
+            textAlign: TextAlign.center)
+      ])),
     );
   }
 }

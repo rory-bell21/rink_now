@@ -52,7 +52,13 @@ class PostDisplayer extends StatelessWidget {
               Expanded(
                   child: Column(
                 children: <Widget>[
-                  Text('\$' + currPost.price.toString(),
+                  Text(
+                      '\$' +
+                          currPost.price.toStringAsFixed(
+                              currPost.price.truncateToDouble() ==
+                                      currPost.price
+                                  ? 2
+                                  : 2),
                       style: TextStyle(
                           //color: Colors.green,
                           fontSize: 20,
@@ -71,8 +77,6 @@ class PostDisplayer extends StatelessWidget {
                             ],
                           )),
                           onPressed: () {
-                            print(model.authenticatedUser.email);
-                            print(model.authenticatedUser.name);
                             model.selectPost(currPost.id);
                             Navigator.pushNamed<bool>(
                                 context, '/post/' + currPost.id);

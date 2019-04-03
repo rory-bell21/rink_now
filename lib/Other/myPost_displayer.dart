@@ -41,21 +41,37 @@ class MyPostsDisplayer extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: <Widget>[
-                    Text('\$' + currPost.price.toString(),
+                    Text(
+                        '\$' +
+                            currPost.price.toStringAsFixed(
+                                currPost.price.truncateToDouble() ==
+                                        currPost.price
+                                    ? 2
+                                    : 2),
                         style: TextStyle(
-                            fontFamily: 'Oswald',
-                            color: Colors.green,
+                            //color: Colors.green,
                             fontSize: 20,
                             fontWeight: FontWeight.bold)),
-                    RaisedButton(
-                        child: Text('Edit'),
-                        onPressed: () {
-                          model.selectPost(currPost.id);
-                          Navigator.pushNamed<bool>(
-                              context, '/edit/' + currPost.id);
-                        }
-                        //specifying a page to push to stack?,
-                        )
+                    Theme(
+                        data: ThemeData.dark(),
+                        child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0)),
+                            color: Theme.of(context).primaryColorDark,
+                            child: Center(
+                                child: Row(
+                              children: <Widget>[
+                                Icon(Icons.arrow_forward),
+                                Text('    Edit'),
+                              ],
+                            )),
+                            onPressed: () {
+                              model.selectPost(currPost.id);
+                              Navigator.pushNamed<bool>(
+                                  context, '/edit/' + currPost.id);
+                            }
+                            //specifying a page to push to stack?,
+                            ))
                   ],
                 ),
               )

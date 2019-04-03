@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HamburgerMenu extends StatelessWidget {
-  String currPage;
+  final String currPage;
 
   HamburgerMenu(this.currPage);
 
@@ -15,7 +15,7 @@ class HamburgerMenu extends StatelessWidget {
             title: Text('Choose'),
           ),
           ListTile(
-            leading: Icon(Icons.search),
+            leading: Icon(Icons.burst_mode),
             title: Text('All Posts'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/posts');
@@ -32,7 +32,7 @@ class HamburgerMenu extends StatelessWidget {
             leading: Icon(Icons.bookmark),
             title: Text('My Bookings'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/boookings');
+              Navigator.pushReplacementNamed(context, '/bookings');
             },
           ),
           ListTile(

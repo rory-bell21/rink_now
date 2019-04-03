@@ -85,13 +85,15 @@ class DropDownCheckbox extends FormField<dynamic> {
                     List selectedValues = await showDialog<List>(
                       context: state.context,
                       builder: (BuildContext context) {
-                        return MultiSelectDialog(
-                          title: titleText,
-                          okButtonLabel: okButtonLabel,
-                          cancelButtonLabel: cancelButtonLabel,
-                          items: items,
-                          initialSelectedValues: initialSelected,
-                        );
+                        return Theme(
+                            data: new ThemeData.light(),
+                            child: MultiSelectDialog(
+                              title: titleText,
+                              okButtonLabel: okButtonLabel,
+                              cancelButtonLabel: cancelButtonLabel,
+                              items: items,
+                              initialSelectedValues: initialSelected,
+                            ));
                       },
                     );
 

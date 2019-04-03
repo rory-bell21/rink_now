@@ -13,6 +13,7 @@ environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
 
 dependencies:
+  
   firebase_auth: ^0.8.3
   stripe_payment: ^0.1.0
   cloud_firestore: ^0.9.7
@@ -28,10 +29,15 @@ dependencies:
   http: ^0.12.0+1
   numberpicker: ^1.0.0
 dev_dependencies:
+  flutter_launcher_icons: ^0.7.0
   flutter_test:
     sdk: flutter
 
-
+flutter_icons:
+  android: "launcher_icon" 
+  ios: true
+  image_path: "assets/RinkNowLogo.png"
+  image_path_ios: "assets/RinkNowLogo.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 
@@ -47,6 +53,7 @@ flutter:
   assets:
     - assets/rink.jpg
     - assets/background.png
+    - assets/RinkNowLogo.png
   #  - images/a_dot_ham.jpeg 
 
   # An image asset can refer to one or more resolution-specific "variants", see

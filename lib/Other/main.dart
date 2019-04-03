@@ -18,7 +18,6 @@ void main() {
   // debugPaintSizeEnabled = true;
   // debugPaintBaselinesEnabled = true;
   // debugPaintPointersEnabled = true;
-  StripeSource.setPublishableKey("pk_test");
 
   runApp(MyApp());
 }

@@ -214,11 +214,12 @@ class _PostEditPageState extends State<PostEditPage> {
                         color: Theme.of(context).primaryColorDark,
                         textColor: Colors.white,
                         onPressed: () {
+                          print(_formData["date"].toString() + "DATTTEEEE");
                           showDatePicker(
-                                  firstDate: DateTime.now()
-                                      .add(new Duration(days: -60)),
-                                  lastDate: DateTime.now()
-                                      .add(new Duration(days: 60)),
+                                  firstDate:
+                                      DateTime.now().add(Duration(days: -60)),
+                                  lastDate:
+                                      DateTime.now().add(Duration(days: 60)),
                                   initialDate: DateTime.now(),
                                   context: context)
                               .then((DateTime selectedDate) {
@@ -230,10 +231,10 @@ class _PostEditPageState extends State<PostEditPage> {
                               newDate = selectedDate.add(Duration(
                                   hours: selectedTime.hour,
                                   minutes: selectedTime.minute));
+                              setState(() {
+                                _formData["date"] = newDate;
+                              });
                             });
-                          });
-                          setState(() {
-                            _formData["date"] = newDate;
                           });
                         },
                       ),

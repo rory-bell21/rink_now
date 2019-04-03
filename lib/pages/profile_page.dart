@@ -30,8 +30,8 @@ class ProfilePage extends StatelessWidget {
               print("button");
               StripeSource.addSource().then((String token) {
                 print(token);
-                PaymentService().addCard(token); //your stripe card source token
-                print("out");
+                PaymentService(model)
+                    .addCard(token); //your stripe card source token
               });
               /* Firestore.instance
                   .collection('books')

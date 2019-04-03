@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:rink_now/scoped_models/main_model.dart';
+import 'package:stripe_payment/stripe_payment.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -12,6 +13,13 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  @override
+  void initState() {
+    super.initState();
+    StripeSource.setPublishableKey(
+        "pk_test_vH1ftTZga0pCAXAI1onR5o5O00V7csyOdY");
+  }
+
   final Map<String, dynamic> _formData = {
     'email': null,
     'password': null,
@@ -174,6 +182,13 @@ class _AuthPageState extends State<AuthPage> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
+                    /* Container(
+                        alignment: Alignment.topCenter,
+                        child: Image(
+                          image: AssetImage('assets/RinkNowLogo.png'),
+                          height: 200,
+                          width: 200,
+                        )),*/
                     _buildEmailTextField(),
                     SizedBox(
                       height: 10.0,

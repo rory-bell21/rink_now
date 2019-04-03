@@ -209,9 +209,9 @@ mixin UserModel on ConnectedPosts {
     );
 
     final Map<String, dynamic> responseData = json.decode(response.body);
-    print(responseData);
     bool hasError = true;
     String message = 'Something went wrong.';
+    print("????????");
     print(responseData);
     if (responseData.containsKey('idToken')) {
       hasError = false;
@@ -223,14 +223,16 @@ mixin UserModel on ConnectedPosts {
     }
     _isLoading = false;
     notifyListeners();
+    authenticatedUser = User(
+        email: email,
+        password: password,
+        id: responseData["localId"],
+        name: responseData["displayName"]);
     return {'success': !hasError, 'message': message};
   }
 
   Future<Map<String, dynamic>> signup(
       String email, String password, String name) async {
-    print(name + "#######################");
-    authenticatedUser =
-        User(email: email, password: password, id: null, name: name);
     _isLoading = true;
     notifyListeners();
     final Map<String, dynamic> authData = {
@@ -255,6 +257,12 @@ mixin UserModel on ConnectedPosts {
     }
     _isLoading = false;
     notifyListeners();
+    authenticatedUser = User(
+        email: email,
+        password: password,
+        id: responseData["localId"],
+        name: name);
+
     return {'success': !hasError, 'message': message};
   }
 }

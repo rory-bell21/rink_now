@@ -118,17 +118,20 @@ class _PostCreatePageState extends State<PostCreatePage> {
             ),
             TextFormField(
               decoration: new InputDecoration(labelText: "Enter Price"),
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               onSaved: (String value) {
                 _formData["price"] = double.parse(value);
               },
             ),
             SizedBox(
-              height: 10.0,
+              height: 30.0,
             ),
             Column(
               children: <Widget>[
-                Text("Select City: "),
+                Text(
+                  "Select City: ",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 Theme(
                     isMaterialAppTheme: true,
                     data: ThemeData.fallback(),
@@ -147,26 +150,19 @@ class _PostCreatePageState extends State<PostCreatePage> {
               ],
             ),
             SizedBox(
-              height: 10.0,
+              height: 30.0,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 RaisedButton(
-                  child: Center(
-                      child: Text('  Select Date\n' +
-                          DateFormat.MMMd().format(_formData[
-                              'date']) + //how to get this to update when date is selected, might need to make a new widget
-                          ", " +
-                          DateFormat.jm().format(_formData['date']))),
-                  color: Theme.of(context).primaryColorDark,
+                  child: Center(child: Text('Select Date')),
+                  color: Theme.of(context).accentColor,
                   textColor: Colors.white,
                   onPressed: () {
                     showDatePicker(
-                            firstDate:
-                                DateTime.now().add(new Duration(days: -60)),
-                            lastDate:
-                                DateTime.now().add(new Duration(days: 60)),
+                            firstDate: DateTime.now().add(Duration(days: -60)),
+                            lastDate: DateTime.now().add(Duration(days: 60)),
                             initialDate: DateTime.now(),
                             context: context)
                         .then((DateTime selectedDate) {
@@ -174,25 +170,29 @@ class _PostCreatePageState extends State<PostCreatePage> {
                         initialTime: TimeOfDay(hour: 18, minute: 0),
                         context: context,
                       ).then((TimeOfDay selectedTime) {
-                        _formData["date"] = selectedDate.add(Duration(
-                            hours: selectedTime.hour,
-                            minutes: selectedTime.minute));
+                        setState(() {
+                          _formData["date"] = selectedDate.add(Duration(
+                              hours: selectedTime.hour,
+                              minutes: selectedTime.minute));
+                        });
                       });
                     });
                   },
                 ),
                 Container(),
                 Container(
-                    child: Text(
-                  DateFormat.MMMd().format(_formData[
+                    child: Center(
+                        child: Text(
+                  "              " +
+                      DateFormat.MMMd().format(_formData[
                           'date']) + //how to get this to update when date is selected, might need to make a new widget
                       ", " +
                       DateFormat.jm().format(_formData['date']),
-                ))
+                )))
               ],
             ),
             SizedBox(
-              height: 10.0,
+              height: 30.0,
             ),
             Container(child: _buildSubmitButton()),
           ],
