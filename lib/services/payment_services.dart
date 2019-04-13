@@ -12,8 +12,7 @@ class PaymentService {
           .collection('cards')
           .document(model.authenticatedUser.id)
           .collection('tokens')
-          .add({'tokenId': token}).then((val) {
-        print(val.toString() + "!!!!!!!!!!!");
+          .add({'tokenid': token}).then((val) {
         print(model.authenticatedUser.id);
         print('saved');
       });

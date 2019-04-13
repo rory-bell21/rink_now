@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:rink_now/types/post.dart';
 import 'package:rink_now/types/user.dart';
@@ -202,33 +203,37 @@ mixin UserModel on ConnectedPosts {
       'password': password,
       'returnSecureToken': true
     };
-    final http.Response response = await http.post(
+    /* final http.Response response = await http.post(
       'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDXdle-9OnW8ZBFhCrHdq-0Jb9u10Df8k8',
       body: json.encode(authData),
       headers: {'Content-Type': 'application/json'},
-    );
-
-    final Map<String, dynamic> responseData = json.decode(response.body);
-    bool hasError = true;
-    String message = 'Something went wrong.';
-    print("????????");
-    print(responseData);
-    if (responseData.containsKey('idToken')) {
-      hasError = false;
-      message = 'Authentication succeeded!';
-    } else if (responseData['error']['message'] == 'EMAIL_NOT_FOUND') {
-      message = 'This email was not found.';
-    } else if (responseData['error']['message'] == 'INVALID_PASSWORD') {
-      message = 'The password is invalid.';
-    }
-    _isLoading = false;
-    notifyListeners();
-    authenticatedUser = User(
+    ); */
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((usr) {
+      /*  final Map<String, dynamic> responseData = json.decode(response.body);
+      bool hasError = true;
+      String message = 'Something went wrong.';
+      print("????????");
+      print(responseData);
+      if (responseData.containsKey('idToken')) {
+        hasError = false;
+        message = 'Authentication succeeded!';
+      } else if (responseData['error']['message'] == 'EMAIL_NOT_FOUND') {
+        message = 'This email was not found.';
+      } else if (responseData['error']['message'] == 'INVALID_PASSWORD') {
+        message = 'The password is invalid.';
+      } */
+      _isLoading = false;
+      notifyListeners();
+      authenticatedUser = User(
         email: email,
         password: password,
-        id: responseData["localId"],
-        name: responseData["displayName"]);
-    return {'success': !hasError, 'message': message};
+        id: usr.uid, //responseData["localId"],
+        name: usr.displayName,
+      ); //responseData["displayName"]);
+      return {'success': true, 'message': "a msg"};
+    });
   }
 
   Future<Map<String, dynamic>> signup(

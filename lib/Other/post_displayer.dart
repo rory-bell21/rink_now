@@ -19,12 +19,12 @@ class PostDisplayer extends StatelessWidget {
         builder: (BuildContext context, Widget child, MainModel model) {
       final Post currPost = model.allPosts[index];
       if ((searchFilter == null ||
-                  searchFilter == "" ||
-                  currPost.selectedRink
-                      .toLowerCase()
-                      .contains(searchFilter.toLowerCase())) &&
-              selectedCities.contains(currPost.city) ||
-          selectedCities.length == 0) {
+              searchFilter == "" ||
+              currPost.selectedRink
+                  .toLowerCase()
+                  .contains(searchFilter.toLowerCase())) &&
+          (selectedCities.contains(currPost.city) ||
+              selectedCities.length == 0)) {
         return Card(
           borderOnForeground: true,
           color: Colors.white54,
@@ -111,7 +111,6 @@ class PostDisplayer extends StatelessWidget {
   //BUILD Method
   @override
   Widget build(BuildContext context) {
-    print('[Products Widget] build()');
     return ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
       return _buildPostList(model.allPosts);

@@ -15,10 +15,6 @@ import 'package:stripe_payment/stripe_payment.dart';
 // import 'package:flutter/rendering.dart';
 
 void main() {
-  // debugPaintSizeEnabled = true;
-  // debugPaintBaselinesEnabled = true;
-  // debugPaintPointersEnabled = true;
-
   runApp(MyApp());
 }
 
@@ -52,8 +48,6 @@ class _MyAppState extends State<MyApp> {
             '/admin': (BuildContext context) => ManagePosts(model),
             '/info': (BuildContext context) => InfoPage(),
             '/profile': (BuildContext context) => ProfilePage(model),
-            //'/post': (BuildContext context) => InfoPage(),
-            //'/edit' : (BuildContext context) => PostEditPage(),
           },
           //below gets called when name not in routes, dynamically pass data too post page....
           onGenerateRoute: (RouteSettings settings) {
@@ -68,7 +62,6 @@ class _MyAppState extends State<MyApp> {
                 builder: (BuildContext context) => PostPage(postID),
               );
             } else if (pathElements[1] == 'edit') {
-              print("innnnnn");
               final String postID = pathElements[2];
               return MaterialPageRoute<bool>(
                 builder: (BuildContext context) => PostEditPage(postID, model),

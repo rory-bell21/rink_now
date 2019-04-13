@@ -1,38 +1,52 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-admin.initializeApp(functions.config().firbase);
+admin.initializeApp(functions.config().firebase);
 
 const firestore = admin.firestore();
 const settings = { timestampInSnapshots: true };
 firestore.settings(settings);
 
-const stripe = require('stripe')(functions.config().stripe.token);
+//const stripe = require('stripe')(functions.config().stripe.token);
+
+var stripe = require("stripe")("sk_test_qB1nqkICI1qTMBgkVirAEnpu00eYrxaqQR");
 
 exports.addStripeSource = functions.firestore.document('cards/{userid}/tokens/{tokenid}').onCreate(async (tokenSnap, context) => {
         var customer;
-        const data = tokenSnap.after.data();
+        var data = tokenSnap.data();
         if (data === null) {
                 return null;
         }
-        const token = data.tokenId;
-        const snapshot = await firestore.collection('cards').doc(context.params.userId).get();//this will be the userID from cards doc in firestore
-        const customerId = snapshot.data().custId;
-        const customerEmail = snapshot.data.email;
+        const token = data.tokenid;
 
-        if (customerId === 'new') {
-                customer = await stripe.customers.create({
-                        email: customerEmail,
-                        source: token
-                });
-                firestore.collection('cards').doc(context.params.userId).update({
-                        custId: customer.id //this is updating customerId in firestore
-                });
-        }
-        else {
-                customer = await stripe.customers.retrieve(customerId);
-        }
+
+        const snapshot = await firestore.collection('cards').doc(context.params.userid).get();//this will be the userID from cards doc in firestore
+        console.log(".5");
+        const customerId = snapshot.data().custId;
+        console.log(".66");
+        const customerEmail = snapshot.data().email;
+        console.log(".77");
+        console.log(customerId);
+        //if (customerId === 'new') {
+        console.log("1");
+        customer = await stripe.customers.create({
+                email: customerEmail,
+                source: token
+        });
+        console.log("2");
+        firestore.collection('cards').doc(context.params.userid).update({
+                custId: customer.id //this is updating customerId in firestore
+        });
+        console.log("3");
+        //}
+        // else {
+        //        customer = await stripe.customers.retrieve(customerId);
+        // }
+        console.log("4");
+        console.log(customer.sources)
         const customerSource = customer.sources.data[0];
-        return firestore.collection('cards').doc(context.params.userId).collection('sources').doc(customerSource.card.fingerprint).set(customerSource, { merge: true });
+        console.log("5");
+        console.log(customerSource);
+        return firestore.collection('cards').doc(context.params.userid).collection('sources').doc(customerSource.card.fingerprint).set(customerSource, { merge: true });
 })
 
 
@@ -41,10 +55,3 @@ exports.addStripeSource = functions.firestore.document('cards/{userid}/tokens/{t
 
 
 
-
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });

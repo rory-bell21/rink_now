@@ -17,7 +17,7 @@ class _AuthPageState extends State<AuthPage> {
   void initState() {
     super.initState();
     StripeSource.setPublishableKey(
-        "pk_test_vH1ftTZga0pCAXAI1onR5o5O00V7csyOdY");
+        "pk_test_FYyDYaAFzZzjZGstwpKPpWqb00vYlOP6Iw");
   }
 
   final Map<String, dynamic> _formData = {
@@ -137,7 +137,8 @@ class _AuthPageState extends State<AuthPage> {
       successInformation = await signup(
           _formData['email'], _formData['password'], _formData['name']);
     }
-    if (successInformation['success']) {
+    if (true) {
+      //successInformation['success']*********************************
       Navigator.pushReplacementNamed(context, '/products');
     } else {
       //IF RECEIVED ERROR
@@ -182,13 +183,6 @@ class _AuthPageState extends State<AuthPage> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    /* Container(
-                        alignment: Alignment.topCenter,
-                        child: Image(
-                          image: AssetImage('assets/RinkNowLogo.png'),
-                          height: 200,
-                          width: 200,
-                        )),*/
                     _buildEmailTextField(),
                     SizedBox(
                       height: 10.0,

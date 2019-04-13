@@ -37,6 +37,7 @@ class PostListPageState extends State<PostListPage> {
     _selectedCities = [];
     controller.addListener(() {
       setState(() {
+        print("Set Filter");
         searchFilter = controller.text;
       });
     });

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rink_now/Other/post_displayer.dart';
+
 import 'package:rink_now/scoped_models/main_model.dart';
 
 import 'package:rink_now/widgets/hamburger_menu.dart';

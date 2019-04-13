@@ -22,8 +22,8 @@ class ProfilePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          //Container(child: Text(model.authenticatedUser.name)),
-          //Container(child: Text(model.authenticatedUser.email)),
+          Container(child: Text(model.authenticatedUser.name)),
+          Container(child: Text(model.authenticatedUser.email)),
           RaisedButton(
             child: Text('Add Card'),
             onPressed: () {

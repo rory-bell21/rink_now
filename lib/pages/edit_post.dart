@@ -91,7 +91,6 @@ class _PostEditPageState extends State<PostEditPage> {
       return;
     }
     _formKey.currentState.save();
-    print(_formData);
     updatePost(_formData['city'], _formData['description'],
         _formData['selectedRink'], _formData["date"], _formData['price']);
     widget.model.fetchPosts("Date");
@@ -131,7 +130,6 @@ class _PostEditPageState extends State<PostEditPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(onWillPop: () {
-      print('Back button pressed!');
       Navigator.pop(context, false);
       //return Future.value(false);
     }, child: Container(child: ScopedModelDescendant<MainModel>(
@@ -214,7 +212,6 @@ class _PostEditPageState extends State<PostEditPage> {
                         color: Theme.of(context).primaryColorDark,
                         textColor: Colors.white,
                         onPressed: () {
-                          print(_formData["date"].toString() + "DATTTEEEE");
                           showDatePicker(
                                   firstDate:
                                       DateTime.now().add(Duration(days: -60)),
@@ -241,8 +238,7 @@ class _PostEditPageState extends State<PostEditPage> {
                       Container(),
                       Container(
                           child: Text(
-                        DateFormat.MMMd().format(_formData[
-                                'date']) + //how to get this to update when date is selected, might need to make a new widget
+                        DateFormat.MMMd().format(_formData['date']) +
                             ", " +
                             DateFormat.jm().format(_formData['date']),
                       ))
@@ -256,6 +252,8 @@ class _PostEditPageState extends State<PostEditPage> {
                     height: 10.0,
                   ),
                   RaisedButton(
+                    color: Theme.of(context).primaryColorDark,
+                    textColor: Colors.redAccent,
                     child: Text('DELETE POST'),
                     onPressed: () => _showWarningDialog(context),
                   ),

@@ -34,7 +34,7 @@ class _PostCreatePageState extends State<PostCreatePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //List<String> rinks = ["Canlan", "Port Credit", "Scotia"];
   final Map<String, dynamic> _formData = {
-    "city": null,
+    "city": "Other",
     "date": DateTime.now(),
     "description": null,
     "selectedRink": null,
@@ -119,6 +119,11 @@ class _PostCreatePageState extends State<PostCreatePage> {
             TextFormField(
               decoration: new InputDecoration(labelText: "Enter Price"),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
+              validator: (String value) {
+                if (value.trim().length <= 0) {
+                  return 'Price is required';
+                }
+              },
               onSaved: (String value) {
                 _formData["price"] = double.parse(value);
               },
@@ -146,14 +151,12 @@ class _PostCreatePageState extends State<PostCreatePage> {
                         });
                       },
                     )),
-                //data: new ThemeData.dark()),
               ],
             ),
             SizedBox(
               height: 30.0,
             ),
             Row(
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 RaisedButton(
                   child: Center(child: Text('Select Date')),
