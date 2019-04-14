@@ -49,6 +49,39 @@ exports.addStripeSource = functions.firestore.document('cards/{userid}/tokens/{t
         return firestore.collection('cards').doc(context.params.userid).collection('sources').doc(customerSource.card.fingerprint).set(customerSource, { merge: true });
 })
 
+exports.createCharge = functions.firestore.document('cards/{userid}/charges/{chargeid}').onCreate(async (chargeSnapId, context) => {
+        try {
+
+                const chargeSnap = await firestore.collection('cards').doc(context.params.userid).get();
+                //const chargeSnapInfo = await firestore.collection('cards').doc(context.params.userid.charges).get();
+
+                //string userIdent = context.params.userid;
+                //const chargeSnapId = await firestore.collection('charges').doc(context.params.chargeId).get(); //lowercase next
+                // console.log("chargesnapID^");
+                //console.log(chargeSnapId);
+                //console.log("chargesnapinfo^");
+                //console.log(chargeSnapInfo);
+                console.log("chargeSnap^");
+                console.log(chargeSnap);
+                const customer = chargeSnap.data().custId;
+                const amount = chargeSnapId.data().amount;
+                const currency = "cad";
+                const description = chargeSnapId.data().description;
+                console.group("amount^");
+                console.log(amount);
+                const charge = { amount, currency, customer, description };
+                const idempotentKey = context.params.chargeId; //might need to change to chargeid
+                const response = await stripe.charges.create(charge, { idempotency_key: idempotentKey });
+                console.log("hello");
+                return chargeSnapId.ref.set(response, { merge: true });
+
+        }
+        catch (error) {
+                console.log(context.params.userid);
+                await chargeSnap.ref.set({ error: error.message }, { merge: true });
+        }
+
+});
 
 
 

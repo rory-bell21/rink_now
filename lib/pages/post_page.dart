@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:rink_now/Other/myBookings_displayer.dart';
+import 'package:rink_now/services/payment_services.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:rink_now/scoped_models/main_model.dart';
 
@@ -9,8 +11,9 @@ import '../types/post.dart';
 
 class PostPage extends StatelessWidget {
   final String postID;
+  final MainModel model;
 
-  PostPage(this.postID);
+  PostPage(this.postID, this.model);
 
   _showWarningDialog(BuildContext context) {
     showDialog(
@@ -77,7 +80,8 @@ class PostPage extends StatelessWidget {
                 child: RaisedButton(
                   color: Theme.of(context).accentColor,
                   child: Text('PAY'),
-                  onPressed: () => _showWarningDialog(context),
+                  onPressed: () =>
+                      PaymentService(model).buyItem(currPost.price),
                 ),
               )
             ],

@@ -8,13 +8,15 @@ import '../types/post.dart';
 //import 'scoped_models/posts_model.dart';
 //import 'types/post.dart';
 
-class MyPostsDisplayer extends StatelessWidget {
+class MyBookingsDisplayer extends StatelessWidget {
+  MainModel model;
+  MyBookingsDisplayer(this.model);
+
   //method
   Widget _buildPostItem(BuildContext context, int index) {
     return ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
-      if (model.posts[index].userEmail == model.authenticatedUser.email ||
-          model.posts[index].id == model.authenticatedUser.id) {
+      if (model.posts[index].bookedBy == model.authenticatedUser.id) {
         final Post currPost = model.posts[index];
         return Card(
             borderOnForeground: true,
@@ -53,26 +55,6 @@ class MyPostsDisplayer extends StatelessWidget {
                             //color: Colors.green,
                             fontSize: 20,
                             fontWeight: FontWeight.bold)),
-                    Theme(
-                        data: ThemeData.dark(),
-                        child: RaisedButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0)),
-                            color: Theme.of(context).primaryColorDark,
-                            child: Center(
-                                child: Row(
-                              children: <Widget>[
-                                Icon(Icons.arrow_forward),
-                                Text('    Edit'),
-                              ],
-                            )),
-                            onPressed: () {
-                              model.selectPost(currPost.id);
-                              Navigator.pushNamed<bool>(
-                                  context, '/edit/' + currPost.id);
-                            }
-                            //specifying a page to push to stack?,
-                            ))
                   ],
                 ),
               )

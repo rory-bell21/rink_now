@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rink_now/Other/myBookings_displayer.dart';
 
 import 'package:rink_now/scoped_models/main_model.dart';
 
@@ -27,10 +28,7 @@ class MyBookingsPageState extends State<MyBookingsPage> {
         title: Text('My Bookings'),
       ),
       body: Center(
-        child: Text(
-          "COMING SOON!\nAll bookings a user has made will appear on this page",
-          textAlign: TextAlign.center,
-        ),
+        child: MyBookingsDisplayer(widget.model),
       ),
     );
   }

@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
             if (pathElements[1] == 'post') {
               final String postID = pathElements[2];
               return MaterialPageRoute<bool>(
-                builder: (BuildContext context) => PostPage(postID),
+                builder: (BuildContext context) => PostPage(postID, model),
               );
             } else if (pathElements[1] == 'edit') {
               final String postID = pathElements[2];

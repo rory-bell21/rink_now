@@ -37,7 +37,8 @@ mixin PostsModel on ConnectedPosts {
       'date': currPost.date.toString(),
       'selectedRink': currPost.selectedRink,
       'userEmail': authenticatedUser.email,
-      'userID': authenticatedUser.id
+      'userID': authenticatedUser.id,
+      'bookedBy': "false",
     };
     http
         .post('https://sportsnow-4e1cf.firebaseio.com/posts.json',
@@ -54,6 +55,7 @@ mixin PostsModel on ConnectedPosts {
         userEmail: authenticatedUser.email,
         userID: authenticatedUser.id,
         date: currPost.date,
+        bookedBy: "none",
       );
       posts.add(newPost);
     });
@@ -117,7 +119,8 @@ mixin PostsModel on ConnectedPosts {
       'date': date.toString(),
       'selectedRink': selectedRink,
       'userEmail': authenticatedUser.email,
-      'userID': authenticatedUser.id
+      'userID': authenticatedUser.id,
+      'bookedBy': "none"
     };
     return http
         .put(
@@ -158,7 +161,8 @@ mixin PostsModel on ConnectedPosts {
               price: postData['price'],
               date: DateTime.parse(postData['date']),
               userEmail: postData['userEmail'],
-              userID: postData['userID']);
+              userID: postData['userID'],
+              bookedBy: postData['bookedBy']);
           fetchedPosts.add(currPost);
         }
       });

@@ -9,6 +9,7 @@ class Post {
   final double price;
   final String userEmail;
   final String userID;
+  String bookedBy;
 
   Post(
       {this.id,
@@ -18,5 +19,6 @@ class Post {
       @required this.date,
       @required this.price,
       @required this.userEmail,
-      @required this.userID});
+      @required this.userID,
+      this.bookedBy});
 }

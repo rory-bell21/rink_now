@@ -18,4 +18,20 @@ class PaymentService {
       });
     });
   }
+
+  buyItem(price) {
+    double purchasePrice = price * 100;
+    FirebaseAuth.instance.currentUser().then((user) {
+      Firestore.instance
+          .collection('cards')
+          .document(user.uid)
+          .collection('charges')
+          .add({
+        'chargeid': "123",
+        'currency': 'cad',
+        'amount': purchasePrice,
+        'description': 'Ice booking'
+      });
+    });
+  }
 }
