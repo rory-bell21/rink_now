@@ -100,7 +100,8 @@ class _PostEditPageState extends State<PostEditPage> {
 //WIDGET
   Widget _buildSubmitButton() {
     return RaisedButton(
-      child: Text('Save'),
+      child: Text('Update',
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
       color: Theme.of(context).primaryColorDark,
       textColor: Colors.white,
       onPressed: () {
@@ -182,7 +183,7 @@ class _PostEditPageState extends State<PostEditPage> {
                   ),
                   Column(
                     children: <Widget>[
-                      Text("Select City: "),
+                      Text("Select City  "),
                       DropdownButton<String>(
                         isExpanded: false,
                         value: currCity,
@@ -238,14 +239,16 @@ class _PostEditPageState extends State<PostEditPage> {
                       Container(),
                       Container(
                           child: Text(
-                        DateFormat.MMMd().format(_formData['date']) +
-                            ", " +
-                            DateFormat.jm().format(_formData['date']),
-                      ))
+                              DateFormat.MMMd().format(_formData['date']) +
+                                  ", " +
+                                  DateFormat.jm().format(_formData['date']) +
+                                  "   ",
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.bold)))
                     ],
                   ),
                   SizedBox(
-                    height: 10.0,
+                    height: 70.0,
                   ),
                   Container(child: _buildSubmitButton()),
                   SizedBox(
@@ -253,8 +256,11 @@ class _PostEditPageState extends State<PostEditPage> {
                   ),
                   RaisedButton(
                     color: Theme.of(context).primaryColorDark,
-                    textColor: Colors.redAccent,
-                    child: Text('DELETE POST'),
+                    child: Text('DELETE POST',
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        )),
                     onPressed: () => _showWarningDialog(context),
                   ),
                 ],

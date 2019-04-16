@@ -14,6 +14,34 @@ class PostDisplayer extends StatelessWidget {
   PostDisplayer(this.searchFilter, this.selectedCities);
 
   //method
+
+  _confirmBook(BuildContext context, String postID) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Are you sure?'),
+            content: Text(
+                'Please Confirm That You Would Like To Purchase This Ice, Your Credit Card Will Be Charged'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('DISCARD'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text('CONTINUE'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context, true);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
   Widget _buildPostItem(BuildContext context, int index) {
     return ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
@@ -78,8 +106,7 @@ class PostDisplayer extends StatelessWidget {
                           )),
                           onPressed: () {
                             model.selectPost(currPost.id);
-                            Navigator.pushNamed<bool>(
-                                context, '/post/' + currPost.id);
+                            _confirmBook(context, currPost.id);
                           }
                           //specifying a page to push to stack?,
                           ))

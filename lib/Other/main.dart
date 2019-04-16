@@ -33,6 +33,7 @@ class _MyAppState extends State<MyApp> {
         //passes scoped model down widget tree
         model: model,
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           // debugShowMaterialGrid: true,
           theme: ThemeData(
               brightness: Brightness.light,

@@ -108,7 +108,7 @@ class PostListPageState extends State<PostListPage> {
         data: ThemeData.dark(),
         child: DropDownCheckbox(
           autovalidate: false,
-          titleText: 'Tap To Filter By City',
+          titleText: 'Filter By City',
           dataSource: [
             {
               "display": "Toronto",

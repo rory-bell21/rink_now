@@ -36,8 +36,8 @@ class HamburgerMenu extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Profile'),
+            leading: Icon(Icons.credit_card),
+            title: Text('Add Credit Card'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/profile');
             },

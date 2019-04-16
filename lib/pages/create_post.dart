@@ -57,7 +57,8 @@ class _PostCreatePageState extends State<PostCreatePage> {
     return ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
       return RaisedButton(
-        child: Text('Save'),
+        child: Text('Save',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         color: Theme.of(context).primaryColorDark,
         textColor: Colors.white,
         onPressed: () {
@@ -134,12 +135,14 @@ class _PostCreatePageState extends State<PostCreatePage> {
             Column(
               children: <Widget>[
                 Text(
-                  "Select City: ",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  "Select City  ",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Theme(
                     isMaterialAppTheme: true,
-                    data: ThemeData.fallback(),
+                    data: ThemeData(
+                      accentColor: Colors.blue,
+                    ),
                     child: DropdownButton<String>(
                       isExpanded: false,
                       value: selectedCity,
@@ -150,7 +153,7 @@ class _PostCreatePageState extends State<PostCreatePage> {
                           _formData["city"] = newValue;
                         });
                       },
-                    )),
+                    ))
               ],
             ),
             SizedBox(
@@ -159,8 +162,11 @@ class _PostCreatePageState extends State<PostCreatePage> {
             Row(
               children: <Widget>[
                 RaisedButton(
-                  child: Center(child: Text('Select Date')),
-                  color: Theme.of(context).accentColor,
+                  child: Center(
+                      child: Text('Select Date',
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold))),
+                  color: Theme.of(context).primaryColorDark,
                   textColor: Colors.white,
                   onPressed: () {
                     showDatePicker(
@@ -184,14 +190,16 @@ class _PostCreatePageState extends State<PostCreatePage> {
                 ),
                 Container(),
                 Container(
-                    child: Center(
-                        child: Text(
-                  "              " +
-                      DateFormat.MMMd().format(_formData[
-                          'date']) + //how to get this to update when date is selected, might need to make a new widget
-                      ", " +
-                      DateFormat.jm().format(_formData['date']),
-                )))
+                  child: Center(
+                      child: Text(
+                    "    " +
+                        DateFormat.MMMd().format(_formData[
+                            'date']) + //how to get this to update when date is selected, might need to make a new widget
+                        ", " +
+                        DateFormat.jm().format(_formData['date']),
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  )),
+                )
               ],
             ),
             SizedBox(

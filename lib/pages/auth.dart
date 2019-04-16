@@ -124,15 +124,15 @@ class _AuthPageState extends State<AuthPage> {
 
   //Submits forms and calls signup from connected_posts
   void _submitForm(Function login, Function signup) async {
-    if (!_formKey.currentState.validate() || !_formData['acceptTerms']) {
-      return;
-    }
     _formKey.currentState.save();
     Map<String, dynamic> successInformation;
     if (_authMode == AuthMode.Login) {
       successInformation = await login(
           _formData['email'], _formData['password']); //connected_posts
     } else {
+      if (!_formKey.currentState.validate() || !_formData['acceptTerms']) {
+        return;
+      }
       //SIGNUP:
       successInformation = await signup(
           _formData['email'], _formData['password'], _formData['name']);
@@ -168,7 +168,7 @@ class _AuthPageState extends State<AuthPage> {
     final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: _authMode == AuthMode.Login ? Text("Login") : Text("Sign Up"),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -200,7 +200,9 @@ class _AuthPageState extends State<AuthPage> {
                     _authMode == AuthMode.Signup
                         ? _buildPasswordConfirmTextField()
                         : Container(),
-                    _buildAcceptSwitch(),
+                    _authMode == AuthMode.Signup
+                        ? _buildAcceptSwitch()
+                        : Container(),
                     SizedBox(
                       height: 10.0,
                     ),
