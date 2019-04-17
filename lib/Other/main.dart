@@ -10,7 +10,6 @@ import 'package:rink_now/pages/profile_page.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 import 'package:rink_now/scoped_models/main_model.dart';
-import 'package:stripe_payment/stripe_payment.dart';
 
 // import 'package:flutter/rendering.dart';
 

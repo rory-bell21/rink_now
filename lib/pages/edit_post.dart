@@ -91,8 +91,13 @@ class _PostEditPageState extends State<PostEditPage> {
       return;
     }
     _formKey.currentState.save();
-    updatePost(_formData['city'], _formData['description'],
-        _formData['selectedRink'], _formData["date"], _formData['price']);
+    updatePost(
+        _formData['city'],
+        _formData['description'],
+        _formData['selectedRink'],
+        _formData["date"],
+        _formData['price'],
+        "none");
     widget.model.fetchPosts("Date");
     Navigator.pop(context);
   }

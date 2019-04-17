@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:rink_now/services/payment_services.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:rink_now/pages/edit_post.dart';
 import 'package:rink_now/scoped_models/main_model.dart';
@@ -15,14 +18,14 @@ class PostDisplayer extends StatelessWidget {
 
   //method
 
-  _confirmBook(BuildContext context, String postID) {
+  _confirmBook(BuildContext context, MainModel model, Post currPost) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Are you sure?'),
             content: Text(
-                'Please Confirm That You Would Like To Purchase This Ice, Your Credit Card Will Be Charged'),
+                'Please confirm that you would like to purchase this ice, your credit card will be charged'),
             actions: <Widget>[
               FlatButton(
                 child: Text('DISCARD'),
@@ -33,8 +36,35 @@ class PostDisplayer extends StatelessWidget {
               FlatButton(
                 child: Text('CONTINUE'),
                 onPressed: () {
+                  PaymentService(model).buyItem(currPost, model);
+                  sleep(const Duration(seconds: 1));
                   Navigator.pop(context);
-                  Navigator.pop(context, true);
+
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          //backgroundColor: Colors.transparent,
+                          title: Text(
+                            "Payment Successful!",
+                            style: TextStyle(
+                                fontFamily: 'Oswald',
+                                //color: Colors.blue,
+                                fontSize: 20.0),
+                            textAlign: TextAlign.center,
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('OK'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.pushReplacementNamed(
+                                    context, '/posts');
+                              },
+                            )
+                          ],
+                        );
+                      });
                 },
               ),
             ],
@@ -52,7 +82,8 @@ class PostDisplayer extends StatelessWidget {
                   .toLowerCase()
                   .contains(searchFilter.toLowerCase())) &&
           (selectedCities.contains(currPost.city) ||
-              selectedCities.length == 0)) {
+              selectedCities.length == 0) &&
+          currPost.bookedBy == "none") {
         return Card(
           borderOnForeground: true,
           color: Colors.white54,
@@ -106,7 +137,7 @@ class PostDisplayer extends StatelessWidget {
                           )),
                           onPressed: () {
                             model.selectPost(currPost.id);
-                            _confirmBook(context, currPost.id);
+                            _confirmBook(context, model, currPost);
                           }
                           //specifying a page to push to stack?,
                           ))

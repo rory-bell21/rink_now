@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:rink_now/types/post.dart';
@@ -22,6 +23,7 @@ mixin PostsModel on ConnectedPosts {
   Future<Null> addPost(String city, String description, String selectedRink,
       DateTime date, double price) {
     Post currPost = Post(
+        bookedBy: 'none',
         userEmail: authenticatedUser.email,
         userID: authenticatedUser.id,
         city: city,
@@ -38,7 +40,7 @@ mixin PostsModel on ConnectedPosts {
       'selectedRink': currPost.selectedRink,
       'userEmail': authenticatedUser.email,
       'userID': authenticatedUser.id,
-      'bookedBy': "false",
+      'bookedBy': "none",
     };
     http
         .post('https://sportsnow-4e1cf.firebaseio.com/posts.json',
@@ -103,13 +105,10 @@ mixin PostsModel on ConnectedPosts {
   //select a post based on the id
   void selectPost(String postId) {
     selPostID = postId;
-    if (postId != null) {
-      //notifyListeners(); //THIS CAUSES BUILD TO BE IN INFINITE LOOP WHEN CLICKED ON A POST
-    }
   }
 
   Future<Null> updatePost(String city, String description, String selectedRink,
-      DateTime date, double price) {
+      DateTime date, double price, String bookedBy) {
     notifyListeners();
     final Map<String, dynamic> updateData = {
       //convert to format for DB
@@ -120,7 +119,7 @@ mixin PostsModel on ConnectedPosts {
       'selectedRink': selectedRink,
       'userEmail': authenticatedUser.email,
       'userID': authenticatedUser.id,
-      'bookedBy': "none"
+      'bookedBy': bookedBy
     };
     return http
         .put(
@@ -207,27 +206,10 @@ mixin UserModel on ConnectedPosts {
       'password': password,
       'returnSecureToken': true
     };
-    /* final http.Response response = await http.post(
-      'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDXdle-9OnW8ZBFhCrHdq-0Jb9u10Df8k8',
-      body: json.encode(authData),
-      headers: {'Content-Type': 'application/json'},
-    ); */
+
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((usr) {
-      /*  final Map<String, dynamic> responseData = json.decode(response.body);
-      bool hasError = true;
-      String message = 'Something went wrong.';
-      print("????????");
-      print(responseData);
-      if (responseData.containsKey('idToken')) {
-        hasError = false;
-        message = 'Authentication succeeded!';
-      } else if (responseData['error']['message'] == 'EMAIL_NOT_FOUND') {
-        message = 'This email was not found.';
-      } else if (responseData['error']['message'] == 'INVALID_PASSWORD') {
-        message = 'The password is invalid.';
-      } */
       _isLoading = false;
       notifyListeners();
       authenticatedUser = User(
@@ -235,7 +217,8 @@ mixin UserModel on ConnectedPosts {
         password: password,
         id: usr.uid, //responseData["localId"],
         name: usr.displayName,
-      ); //responseData["displayName"]);
+      );
+
       return {'success': true, 'message': "a msg"};
     });
   }
@@ -272,6 +255,22 @@ mixin UserModel on ConnectedPosts {
         id: responseData["localId"],
         name: name);
 
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((usr) {
+      print(usr.email);
+      Firestore.instance.collection('cards').document(usr.uid).setData({
+        'custId': usr.uid,
+        'email': email,
+      });
+    });
+/*     FirebaseAuth.instance.currentUser().then((user) {
+      print(user.uid);
+      Firestore.instance.collection('cards').document(user.uid).setData({
+        'custId': user.uid,
+        'email': email,
+      });
+    }); */
     return {'success': !hasError, 'message': message};
   }
 }

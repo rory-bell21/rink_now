@@ -7,8 +7,6 @@ import 'package:rink_now/scoped_models/main_model.dart';
 
 import '../types/post.dart';
 
-//This is the page when u click on a booking or product
-
 class PostPage extends StatelessWidget {
   final String postID;
   final MainModel model;
@@ -78,11 +76,11 @@ class PostPage extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(10.0),
                 child: RaisedButton(
-                  color: Theme.of(context).accentColor,
-                  child: Text('PAY'),
-                  onPressed: () =>
-                      PaymentService(model).buyItem(currPost.price),
-                ),
+                    color: Theme.of(context).accentColor,
+                    child: Text('PAY'),
+                    onPressed: () => print("Uncomment Below")
+                    //PaymentService(model).buyItem(currPost.price),
+                    ),
               )
             ],
           ),
